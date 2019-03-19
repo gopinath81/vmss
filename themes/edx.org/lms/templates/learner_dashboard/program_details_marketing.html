@@ -1,0 +1,91 @@
+## Override the default styles_version to the Pattern Library version (version 2)
+<%! main_css = "style-learner-dashboard" %>
+
+<%page expression_filter="h"/>
+<%inherit file="../main.html" />
+<%namespace name='static' file='../static_content.html'/>
+<%!
+from django.utils.translation import ugettext as _
+%>
+
+<%block name="pagetitle">${_("Program Details")}</%block>
+<%block name="bodyclass">program-details program-view</%block>
+
+<main id="main" aria-label="Content" tabindex="-1">
+	<div class="js-program-details-wrapper">
+    <header class="js-program-header program-header full-width-banner">
+        <div class="banner-background-wrapper">
+            <picture>
+                <source srcset="${program_data['banner_image_urls'].get('w1440h480', '#')}" media="(min-width: 1180px)">
+                <source srcset="${program_data['banner_image_urls'].get('w726h242', '#')}" media="(min-width: 768px)">
+                <img class="banner-background-image" srcset="" alt="${program_data['banner_image_urls'].get('w348h116', '#')}">
+            </picture>
+
+            <div class="banner-content grid-container">
+                <h2 class="hd-1 title row">${program_data['name']}</h2>
+                <p class="hd-4 subtitle row">${program_data['subtitle']}</p>
+            </div>
+        </div>
+        <nav class="breadcrumb-wrapper grid-container" aria-label="breadcrumb" role="navigation"></nav>
+    </header>
+    
+    <div class="program-details-content grid-container">
+        <div class="js-program-progress-view"></div>
+        <h2 class="sr-only collection-title">Course List</h2>
+        <div class="js-course-list row">
+            %for course in program_data['course_codes']:
+                <div class="course-card card">
+                    <div class="section">
+                        <div class="course-meta-container col-12 md-col-8 sm-col-12">
+                            <div class="course-image-container">
+                                <a href="${course['run_modes'][0].get('course_url', '#')}about" class="course-image-link">
+                                    <img class="header-img" src="${course['run_modes'][0].get('course_image_url', '#')}" alt="${course['display_name']}s Home Page.">
+                                </a>
+                            </div>
+                            <div class="course-details">
+                                <h3 class="course-title">                
+                                    <a href="${course['run_modes'][0].get('course_url', '#')}about" class="course-title-link">
+                                        ${course['display_name']}
+                                    </a>
+                                </h3>
+                                <div class="course-text">
+                                    <span class="course-key">${course['key']}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="course-actions col-12 md-col-4 sm-col-12">
+                            <div>
+                                % if course['run_modes'][0]['is_enrolled']:
+                                    <div class="enrollment-info">enrolled</div>
+                                        <a href="${course['run_modes'][0].get('course_url', '#')}" class="btn view-course-link">
+                                            % if course['run_modes'][0]['is_enrollment_open']:
+                                                View Course            
+                                            % else:
+                                                View Archived Course
+                                            % endif
+                                        </a>
+                                % else:
+                                    % if len(course['run_modes']) > 0:
+                                        <div class="enrollment-info">not enrolled</div>
+                                        <a href="/course_modes/choose/${course['run_modes'][0].get('course_key', '#')}/?type=program" class="" style="color: #fff;">
+<button type="button" class="btn-brand btn cta-primary enroll-button">
+    						Enroll Now
+                                        </button></a>
+                                    % else:
+                                        <div class="no-action-message">
+                                            Not Currently Available
+                                        </div>
+                                    % endif
+                                % endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            %endfor
+        </div>
+        <aside class="js-course-sidebar"></aside>
+    </div>
+</div>
+</main>
+
+

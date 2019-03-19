@@ -1,0 +1,32 @@
+<%!
+  import json
+  from django.utils.translation import ugettext as _
+  from microsite_configuration import microsite
+  from openedx.core.djangoapps.theming.helpers import get_current_theme
+%>
+<%inherit file="../main.html" />
+
+<%namespace name='static' file='../static_content.html'/>
+
+<%block name="pagetitle">${_("Programs")}</%block>
+<%block name="bodyclass">view-program-marketing</%block>
+
+<section class="find-courses">
+    <section class="courses-container">
+        <div class="course-nav-box">
+            <div class="course-nav-hd">
+                <h1 class="tracks-heading">PROGRAMS</h1>
+            </div>
+        </div>
+        
+        <div class="courses no-course-discovery programs-list" role="region" aria-label="${_('List of Programs')}">
+            <ul class="courses-listing">
+                %for program in programs:
+                <li class="courses-listing-item">
+                    <%include file="program_marketing.html" args="program=program, marketing_url=marketing_url" />
+                </li>
+                %endfor
+            </ul>
+        </div>
+    </section>
+</section>

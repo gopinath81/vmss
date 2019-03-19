@@ -1,0 +1,26 @@
+<%namespace name='static' file='static_content.html'/>
+<%!
+from django.utils.translation import ugettext as _
+from django.core.urlresolvers import reverse
+from django.utils.text import slugify
+%>
+<%page args="program, marketing_url" expression_filter="h"/>
+
+<article class="course" id="${program['id']}" role="region" aria-label="${program['name']}">
+  <a href="${marketing_url}/${program['id']}/${slugify(program['name'])}">
+    <header class="course-image">
+      <div class="cover-image">
+	  <img src="${program['banner_image_urls'].get('w726h242', '#')}" alt="${program['name']}" />
+      </div>
+    </header>
+    <div class="course-info" aria-hidden="true">
+      <h2 class="course-name">
+        <span class="course-organization">${program['organizations'][0]['display_name']}</span>
+        <span class="course-price">${program['category']}</span>
+        <span class="course-title">${program['name']}</span>
+      </h2>
+      <div class="course-date">${program['subtitle']}</div>
+    </div>
+    <div class="learn-more" aria-hidden="true">LEARN MORE</div>
+  </a>
+</article>
